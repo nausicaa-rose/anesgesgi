@@ -91,7 +91,7 @@ def render_template(template, site_data, page_data):
         A rendered template.
     """
     with open(template, "r", encoding="utf-8") as fh:
-        temp = Template(fh.read())
+        temp = Template(fh.read(), trim_blocks=True, lstrip_blocks=True)
 
     return temp.render(site=site_data, page=page_data)
 

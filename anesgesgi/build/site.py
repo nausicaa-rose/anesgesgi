@@ -36,9 +36,9 @@ def build_site(input_dir, output_dir):
     site_data["template_path"] = os.path.join(
         site_data["input_dir"], site_data["template_dir"]
     )
-    page_dir_offset = len(input_dir) + 1
+    page_dir_offset = len(input_dir)
     for dir_path, _, file_names in os.walk(input_dir):
-        site_data["page_dir"] = dir_path[page_dir_offset:]
+        site_data["page_dir"] = dir_path[page_dir_offset:].lstrip("/")
         full_path = os.path.join(site_data["output_dir"], site_data["page_dir"])
         if not dir_path == site_data["template_path"]:
             if not os.path.exists(full_path):
@@ -47,11 +47,7 @@ def build_site(input_dir, output_dir):
             if site_data["page_dir"] == site_data["blog_dir"]:
                 if site_data["blog_active"]:
                     build_blog(input_dir, output_dir)
-            elif (
-                dir_path == site_data["template_dir"]
-                or dir_path.endswith("site.yml")
-                or dir_path.endswith("blog.yml")
-            ):
+            elif dir_path == site_data["template_dir"]:
                 continue
             else:
                 for file_name in file_names:
@@ -65,8 +61,8 @@ def build_site(input_dir, output_dir):
                                 page = fh.read()
                             build_page(site_data, page)
                         else:
-                            shutil.copyfile(
-                                os.path.join(dir_path, input_path), full_path
-                            )
+                            # No need to copy the site configuration file
+                            if not file_name == "site.yml":
+                                shutil.copyfile(input_path, full_path)
                     elif os.path.isdir(file_name):
                         os.makedirs(full_path)

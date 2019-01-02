@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ site['blog']['name'] }}</title>
+</head>
+<body>
+    <main>
+        <header>
+            <h1>{{ site['blog']['name'] }}</h1>
+        </header>
+        {% for p in page %}
+        <section>
+                <h2><a href="{{ site['url'] }}/{{ site['blog']['url'] }}/{{ p['slug'] }}.html">{{ p['headline'] }}</a></h2>
+        </section>
+        {% endfor %}
+        {# Handle index navigation If there are multiple indices. #}
+        {% if site['blog']['continue'] is defined %}
+        <div>
+            {% if site['blog']['continue'] == 1 %}
+            <a href="{{ site['url'] }}/{{ site['blog']['url'] }}/index.html">&lt;&lt; Newer</a>&nbsp;&nbsp;
+            {# If this is the third index or higher, the newer posts link will be an index with a number one lower than the current index. #}
+            {% elif site['blog']['continue'] > 1 %}
+            <a href="{{ site['url'] }}/{{ site['blog']['url'] }}/index{{ site['blog']['continue'] - 1 }}.html">&lt;&lt; Newer &nbsp;&nbsp;</a>
+            {# If this is the second index, then the link back to newer posts is "index.html" with no numeral. #}
+            {% endif %}
+            {# Point to older posts unless this is the last index. #}
+            {% if site['blog']['continue'] < site['blog']['num_of_indices'] - 1 %}
+            &nbsp;&nbsp;<a href="{{ site['url'] }}/{{ site['blog']['url'] }}/index{{ site['blog']['continue'] + 1 }}.html">Older &gt;&gt;</a>
+        </div>
+            {% else %}
+        </div>
+            {% endif %}
+        {% endif %}
+    </main>
+  </body>
+</html>

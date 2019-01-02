@@ -54,12 +54,14 @@ be passed to page templates.
 Page headers must include:
 
     slug: anesgesgi
+    dateModified: 2018-12-25
     template: blog_post.html
 
 and must end with three hyphens (`---`), so a simple web page or blog post
 might look like:
 
     slug: firstpage
+    dateModified: 2018-12-25
     template: basic.html
     ---
     # My first page

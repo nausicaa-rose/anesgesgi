@@ -1,0 +1,5 @@
+name: Test blog
+# required by anesgesgi
+url: blog
+template: blog_index.html
+max_posts: 2

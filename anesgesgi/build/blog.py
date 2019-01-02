@@ -32,6 +32,7 @@ def build_blog(input_dir, output_dir):
     site_data["output_dir"] = output_dir
     site_data["input_dir"] = input_dir
     site_data["blog_path"] = os.path.join(site_data["input_dir"], site_data["blog_dir"])
+    site_data["page_dir"] = site_data["blog_dir"]
     site_data["template_path"] = os.path.join(
         site_data["input_dir"], site_data["template_dir"]
     )
@@ -63,17 +64,19 @@ def build_indices(site_data, posts):
     -------
     None
     """
-    site_data["blog"]["continue"] = False
+    site_data["blog"]["continue"] = None
     max_posts = site_data["blog"]["max_posts"]
     num_of_posts = len(posts)
-    num_of_indices = ceil(num_of_posts / max_posts)
+    site_data["blog"]["num_of_indices"] = ceil(num_of_posts / max_posts)
 
-    build_index(site_data, posts)
-
-    if num_of_indices > 1:
-        for i in range(1, num_of_indices):
-            site_data["blog"]["continue"] = i
-            build_index(site_data, posts[max_posts * i + 1 :])
+    if num_of_posts > max_posts:
+        index_num = 0
+        for i in range(0, num_of_posts, max_posts):
+            site_data["blog"]["continue"] = index_num
+            index_num += 1
+            build_index(site_data, posts[i : max_posts + i])
+    else:
+        build_index(site_data, posts)
 
 
 def build_index(site_data, posts):
@@ -96,14 +99,14 @@ def build_index(site_data, posts):
     template = os.path.join(site_data["template_path"], site_data["blog"]["template"])
     ext = get_ext(template)
     page = render_template(template, site_data, posts)
-    if site_data["blog"]["continue"]:
+    if not site_data["blog"]["continue"] or site_data["blog"]["continue"] == 0:
+        path = os.path.join(
+            site_data["output_dir"], site_data["blog_dir"], f"index{ext}"
+        )
+    else:
         path = os.path.join(
             site_data["output_dir"],
             site_data["blog_dir"],
             f"index{site_data['blog']['continue']}{ext}",
-        )
-    else:
-        path = os.path.join(
-            site_data["output_dir"], site_data["blog_dir"], f"index{ext}"
         )
     save_page(page, path)

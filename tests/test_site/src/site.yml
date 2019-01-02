@@ -1,0 +1,5 @@
+name: Test site
+# Required by anesgesgi
+blog_active: yes
+blog_dir: blog
+template_dir: templates

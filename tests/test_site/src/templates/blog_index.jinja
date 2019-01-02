@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ site['blog']['name'] }}</title>
+</head>
+<body>
+    <main>
+        <header>
+            <h1>{{ site['blog']['name'] }}</h1>
+        </header>
+        {% for p in page %}
+            <section>
+                    <h2>{{ site['url'] }}/{{ site['blog']['url'] }}/{{ p['slug'] }}.html>{{ p['headline'] }}</h2>
+            </section>
+        {% endfor %}
+        {% if site['blog']['continue'] %}
+            {% if site['blog']['continue'] > 1 %}
+                <div>
+                    <a href={{ site['url']}}/{{ site['blog']['url'] }}/index{{ site['blog']['continue'] - 1 }}.html>&lt;&lt; Newer &nbsp;&nbsp;</a>
+                </div>
+                <div>
+                    <a href="{{ site['url'] }}/{{ site['blog']['url'] }}/index{{ site['blog']['continue'] }}.html">&nbsp;&nbsp;Older &gt;&gt;</a>
+                </div>
+            {% elif site['blog']['continue'] == 1 %}
+                <div>
+                    <a href="{{ site['url'] }}/{{ site['blog]['url'] }}/">&lt;&lt; Newer &nbsp;&nbsp;</a>
+                </div>
+                <div>
+                    <a href="{{ site['url'] }}/{{ site['blog']['url'] }}/index{{ site['blog']['continue'] }}.html">&nbsp;&nbsp;Older &gt;&gt;</a>
+                </div>
+            {% else %}
+                <p><a href="{{ site['url'] }}/{{ site['blog']['url'] }}/{{ site['blog']['continue'] }}">Older &gt;&gt;</a></p>
+            {% endif %}
+        {% endif %}
+    </main>
+  </body>
+</html>
